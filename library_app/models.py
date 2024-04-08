@@ -1,6 +1,27 @@
 from django.db import models
 from uuid import uuid4
-from datetime import datetime
+from datetime import datetime, timezone
+from django.core.exceptions import ValidationError
+from typing import Callable
+
+def get_datetime():
+    return datetime.now(timezone.utc)
+
+def validate_datetime(field_name: str) -> Callable:
+    def validator(dt: datetime) -> None:
+        if dt > get_datetime():
+            raise ValidationError(
+                'Datetime is bigger than current datetime!',
+                params={field_name: dt}
+            )
+    return validator
+
+def validate_year(year: int) -> None:
+    if year > get_datetime().year:
+        raise ValidationError(
+            f'Year {year} is bigger than current year!',
+            params={'year': year},
+        )
 
 class UUIDMixin(models.Model):
     id = models.UUIDField(primary_key=True, blank=True, editable=False, default=uuid4)
@@ -9,13 +30,25 @@ class UUIDMixin(models.Model):
         abstract = True
 
 class CreatedMixin(models.Model):
-    created = models.DateTimeField(null=True, blank=True, default=datetime.now)
+    created = models.DateTimeField(
+        null=True, blank=True,
+        default=get_datetime, 
+        validators=[
+            validate_datetime('created')
+        ]
+    )
 
     class Meta:
         abstract = True
 
 class ModifiedMixin(models.Model):
-    modified = models.DateTimeField(null=True, blank=True, default=datetime.now)
+    modified = models.DateTimeField(
+        null=True, blank=True,
+        default=get_datetime, 
+        validators=[
+            validate_datetime('modified')
+        ]
+    )
 
     class Meta:
         abstract = True
@@ -30,6 +63,7 @@ class Author(UUIDMixin, CreatedMixin, ModifiedMixin):
 
     class Meta:
         db_table = '"library"."author"'
+        ordering = ['full_name']
 
 class Genre(UUIDMixin, CreatedMixin, ModifiedMixin):
     name = models.TextField(null=False, blank=False)
@@ -40,13 +74,19 @@ class Genre(UUIDMixin, CreatedMixin, ModifiedMixin):
     
     class Meta:
         db_table = '"library"."genre"'
+        ordering = ['name']
+
+book_types = (
+    ('book', 'book'),
+    ('magazine', 'magazine'),
+)
 
 class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(null=False, blank=False)
     description = models.TextField(null=True, blank=True)
     volume = models.PositiveIntegerField(null=False, blank=False)
-    type = models.TextField(null=True, blank=True)
-    year = models.IntegerField(null=True, blank=True)
+    type = models.TextField(null=True, blank=True, choices=book_types)
+    year = models.IntegerField(null=True, blank=True, validators=[validate_year])
 
     genres = models.ManyToManyField(Genre, through='BookGenre')
     authors = models.ManyToManyField(Author, through='BookAuthor')
@@ -56,6 +96,7 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
 
     class Meta:
         db_table = '"library"."book"'
+        ordering = ['title']
 
 class BookGenre(UUIDMixin, CreatedMixin):
     book = models.ForeignKey(Book, on_delete=models.CASCADE)
