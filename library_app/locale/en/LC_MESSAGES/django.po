@@ -1,0 +1,120 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2024-04-08 15:44+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: library_app/admin.py:28
+msgid "recency"
+msgstr ""
+
+#: library_app/admin.py:35
+msgid "Created in the last 10 years"
+msgstr ""
+
+#: library_app/admin.py:36
+msgid "Created in the last 20 years"
+msgstr ""
+
+#: library_app/models.py:15
+msgid "Datetime is bigger than current datetime!"
+msgstr ""
+
+#: library_app/models.py:23
+msgid "Year is bigger than current year!"
+msgstr ""
+
+#: library_app/models.py:35
+msgid "created"
+msgstr ""
+
+#: library_app/models.py:48
+msgid "modified"
+msgstr ""
+
+#: library_app/models.py:60
+msgid "full name"
+msgstr ""
+
+#: library_app/models.py:64 library_app/models.py:82 library_app/models.py:122
+msgid "books"
+msgstr ""
+
+#: library_app/models.py:73 library_app/models.py:152
+msgid "author"
+msgstr ""
+
+#: library_app/models.py:74 library_app/models.py:112
+msgid "authors"
+msgstr ""
+
+#: library_app/models.py:77
+msgid "name"
+msgstr ""
+
+#: library_app/models.py:78 library_app/models.py:101
+msgid "description"
+msgstr ""
+
+#: library_app/models.py:91 library_app/models.py:131
+msgid "genre"
+msgstr ""
+
+#: library_app/models.py:92 library_app/models.py:108
+msgid "genres"
+msgstr ""
+
+#: library_app/models.py:95 library_app/models.py:121 library_app/models.py:127
+#: library_app/models.py:148
+msgid "book"
+msgstr ""
+
+#: library_app/models.py:96
+msgid "magazine"
+msgstr ""
+
+#: library_app/models.py:100
+msgid "title"
+msgstr ""
+
+#: library_app/models.py:102
+msgid "volume"
+msgstr ""
+
+#: library_app/models.py:103
+msgid "type"
+msgstr ""
+
+#: library_app/models.py:104
+msgid "year"
+msgstr ""
+
+#: library_app/models.py:142
+msgid "Relationship book genre"
+msgstr ""
+
+#: library_app/models.py:143
+msgid "Relationships book genre"
+msgstr ""
+
+#: library_app/models.py:163
+msgid "Relationship book author"
+msgstr ""
+
+#: library_app/models.py:164
+msgid "Relationships book author"
+msgstr ""
