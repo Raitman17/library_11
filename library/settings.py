@@ -121,3 +121,4 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TEST_RUNNER = 'tests.runner.PostgresSchemaRunner'
+# python3 manage.py test tests
