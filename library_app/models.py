@@ -8,14 +8,18 @@ from django.utils.translation import gettext_lazy as _
 def get_datetime():
     return datetime.now(timezone.utc)
 
-def validate_datetime(field_name: str) -> Callable:
-    def validator(dt: datetime) -> None:
-        if dt > get_datetime():
-            raise ValidationError(
-                _('Datetime is bigger than current datetime!'),
-                params={field_name: dt}
-            )
-    return validator
+def check_created(dt: datetime) -> None:
+    if dt > get_datetime():
+        raise ValidationError(
+            _('Datetime is bigger than current datetime!'),
+            params={'created': dt}
+        )
+def check_modified(dt: datetime) -> None:
+    if dt > get_datetime():
+        raise ValidationError(
+            _('Datetime is bigger than current datetime!'),
+            params={'modified': dt}
+        )
 
 def validate_year(year: int) -> None:
     if year > get_datetime().year:
@@ -36,7 +40,7 @@ class CreatedMixin(models.Model):
         null=True, blank=True,
         default=get_datetime, 
         validators=[
-            validate_datetime('created')
+            check_created,
         ]
     )
 
@@ -49,7 +53,7 @@ class ModifiedMixin(models.Model):
         null=True, blank=True,
         default=get_datetime, 
         validators=[
-            validate_datetime('modified')
+            check_modified,
         ]
     )
 

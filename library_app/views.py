@@ -33,9 +33,6 @@ def create_listview(model_class, plural_name, template):
             return context
     return CustomListView
 
-BookListView = create_listview(Book, 'books', 'catalog/books.html')
-AuthorListView = create_listview(Author, 'authors', 'catalog/authors.html')
-GenreListView = create_listview(Genre, 'genres', 'catalog/genres.html')
 
 def create_view(model_class, context_name, template):
     def view(request):
@@ -53,3 +50,7 @@ def create_view(model_class, context_name, template):
 view_book = create_view(Book, 'book', 'entities/book.html')
 view_author = create_view(Author, 'author', 'entities/author.html')
 view_genre = create_view(Genre, 'genre', 'entities/genre.html')
+
+BookListView = create_listview(Book, 'books', 'catalog/books.html')
+AuthorListView = create_listview(Author, 'authors', 'catalog/authors.html')
+GenreListView = create_listview(Genre, 'genres', 'catalog/genres.html')
