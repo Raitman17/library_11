@@ -17,9 +17,4 @@
     {% else %}
       <p>Book not found..</p>
     {% endif %}
-    {% if client_book %}
-      <h4>You already have it! <a href="{% url 'read' %}?id={{ book.id }}">Read a book.</a></h6>
-    {% else %}
-      <h4>You have not bought this book yet.. <a href="{% url 'buy' %}?id={{ book.id }}">Buy this book.</a>
-    {% endif %}
 {% endblock %}

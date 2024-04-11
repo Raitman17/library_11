@@ -8,7 +8,7 @@
 
       {% for book in books_list %}
       <li>
-        <a>{{ book.title }} {{ book.type }} {{ book.year }}</a>
+        <a href="{% url 'book' %}?id={{book.id}}">{{ book.title }}</a> {{ book.type }} {{ book.year }}
       </li>
       {% endfor %}
     </ul>
