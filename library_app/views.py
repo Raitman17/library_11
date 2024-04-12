@@ -70,20 +70,19 @@ def form_test_page(request):
     )
 
 def register(request):
+    errors = ''
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        print('GOT REGTISTER POST: ', request.POST)
         if form.is_valid():
-            print('1')
             user = form.save()
-            print('2')
             Client.objects.create(user=user)
-            print('3')
             return redirect('homepage')
+        else:
+            errors = form.errors
     else:
         form = RegistrationForm()
     return render(
         request,
         'registration/register.html',
-        {'form': form},
+        {'form': form, 'errors': errors},
     )
