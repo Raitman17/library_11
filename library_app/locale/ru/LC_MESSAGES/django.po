@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-08 15:44+0300\n"
+"POT-Creation-Date: 2024-04-12 09:53+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -32,91 +32,117 @@ msgstr "Написаны за последние 10 лет"
 msgid "Created in the last 20 years"
 msgstr "Написаны за последние 20 лет"
 
-#: library_app/models.py:15
+#: library_app/models.py:15 library_app/models.py:21
 msgid "Datetime is bigger than current datetime!"
 msgstr "Дата и время больше текущих!"
 
-#: library_app/models.py:23
+#: library_app/models.py:28
 msgid "Year is bigger than current year!"
 msgstr "Год больше текущего!"
 
-#: library_app/models.py:35
+#: library_app/models.py:43
 msgid "created"
 msgstr "создано"
 
-#: library_app/models.py:48
+#: library_app/models.py:56
 msgid "modified"
 msgstr "изменено"
 
-#: library_app/models.py:60
+#: library_app/models.py:68 library_app/models.py:184
 msgid "full name"
 msgstr "полное имя"
 
-#: library_app/models.py:64 library_app/models.py:82 library_app/models.py:122
+#: library_app/models.py:72 library_app/models.py:90 library_app/models.py:130
+#: library_app/models.py:186
 msgid "books"
 msgstr "книги"
 
-#: library_app/models.py:73 library_app/models.py:152
+#: library_app/models.py:81 library_app/models.py:160
 msgid "author"
 msgstr "автор"
 
-#: library_app/models.py:74 library_app/models.py:112
+#: library_app/models.py:82 library_app/models.py:120
 msgid "authors"
 msgstr "авторы"
 
-#: library_app/models.py:77
+#: library_app/models.py:85
 msgid "name"
 msgstr "имя"
 
-#: library_app/models.py:78 library_app/models.py:101
+#: library_app/models.py:86 library_app/models.py:109
 msgid "description"
 msgstr "описание"
 
-#: library_app/models.py:91 library_app/models.py:131
+#: library_app/models.py:99 library_app/models.py:139
 msgid "genre"
 msgstr "жанр"
 
-#: library_app/models.py:92 library_app/models.py:108
+#: library_app/models.py:100 library_app/models.py:116
 msgid "genres"
 msgstr "жанры"
 
-#: library_app/models.py:95 library_app/models.py:121 library_app/models.py:127
-#: library_app/models.py:148
+#: library_app/models.py:103 library_app/models.py:129
+#: library_app/models.py:135 library_app/models.py:156
+#: library_app/models.py:198
 msgid "book"
 msgstr "книга"
 
-#: library_app/models.py:96
+#: library_app/models.py:104
 msgid "magazine"
 msgstr "журнал"
 
-#: library_app/models.py:100
+#: library_app/models.py:108
 msgid "title"
 msgstr "название"
 
-#: library_app/models.py:102
+#: library_app/models.py:110
 msgid "volume"
 msgstr "объем"
 
-#: library_app/models.py:103
+#: library_app/models.py:111
 msgid "type"
 msgstr "тип"
 
-#: library_app/models.py:104
+#: library_app/models.py:112
 msgid "year"
 msgstr "год"
 
-#: library_app/models.py:142
+#: library_app/models.py:150
 msgid "Relationship book genre"
 msgstr "связь книга жанр"
 
-#: library_app/models.py:143
+#: library_app/models.py:151
 msgid "Relationships book genre"
 msgstr "связи книга жанр"
 
-#: library_app/models.py:163
+#: library_app/models.py:171
 msgid "Relationship book author"
 msgstr "связь книга автор"
 
-#: library_app/models.py:164
+#: library_app/models.py:172
 msgid "Relationships book author"
 msgstr "связи книга автор"
+
+#: library_app/models.py:179
+msgid "money"
+msgstr "деньги"
+
+#: library_app/models.py:193 library_app/models.py:199
+msgid "client"
+msgstr "клиент"
+
+#: library_app/models.py:194
+msgid "clients"
+msgstr "клиенты"
+
+#: library_app/models.py:206
+#, fuzzy
+#| msgid "Relationship book genre"
+msgid "relationship book client"
+msgstr "связь книга жанр"
+
+#: library_app/models.py:207
+#, fuzzy
+#| msgid "Relationships book genre"
+msgid "relationships book client"
+msgstr "связи книга жанр"

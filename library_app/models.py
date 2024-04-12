@@ -4,6 +4,7 @@ from datetime import datetime, timezone
 from django.core.exceptions import ValidationError
 from typing import Callable
 from django.utils.translation import gettext_lazy as _
+from django.conf.global_settings import AUTH_USER_MODEL
 
 def get_datetime():
     return datetime.now(timezone.utc)
@@ -27,6 +28,9 @@ def validate_year(year: int) -> None:
             _('Year is bigger than current year!'),
             params={'year': year},
         )
+
+NAMES_MAX_LENGTH = 100
+DESCRIPTION_MAX_LENGTH = 1000
 
 class UUIDMixin(models.Model):
     id = models.UUIDField(primary_key=True, blank=True, editable=False, default=uuid4)
@@ -61,7 +65,7 @@ class ModifiedMixin(models.Model):
         abstract = True
 
 class Author(UUIDMixin, CreatedMixin, ModifiedMixin):
-    full_name = models.TextField(_('full name'), null=False, blank=False)
+    full_name = models.TextField(_('full name'), null=False, blank=False, max_length=NAMES_MAX_LENGTH)
 
     books = models.ManyToManyField(
         'Book', through='BookAuthor',
@@ -78,8 +82,8 @@ class Author(UUIDMixin, CreatedMixin, ModifiedMixin):
         verbose_name_plural = _('authors')
 
 class Genre(UUIDMixin, CreatedMixin, ModifiedMixin):
-    name = models.TextField(_('name'), null=False, blank=False)
-    description = models.TextField(_('description'), null=True, blank=True)
+    name = models.TextField(_('name'), null=False, blank=False, max_length=NAMES_MAX_LENGTH)
+    description = models.TextField(_('description'), null=True, blank=True, max_length=DESCRIPTION_MAX_LENGTH)
 
     books = models.ManyToManyField(
         'Book', through='BookGenre',
@@ -101,8 +105,8 @@ book_types = (
 )
 
 class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
-    title = models.TextField(_('title'), null=False, blank=False)
-    description = models.TextField(_('description'), null=True, blank=True)
+    title = models.TextField(_('title'), null=False, blank=False, max_length=NAMES_MAX_LENGTH)
+    description = models.TextField(_('description'), null=True, blank=True, max_length=DESCRIPTION_MAX_LENGTH)
     volume = models.PositiveIntegerField(_('volume'), null=False, blank=False)
     type = models.TextField(_('type'), null=True, blank=True, choices=book_types)
     year = models.IntegerField(_('year'), null=True, blank=True, validators=[validate_year])
@@ -166,3 +170,37 @@ class BookAuthor(UUIDMixin, CreatedMixin):
         )
         verbose_name = _('Relationship book author')
         verbose_name_plural = _('Relationships book author')
+
+
+# from django.conf.global_settings import AUTH_USER_MODEL
+class Client(CreatedMixin, ModifiedMixin):
+    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    money = models.DecimalField(
+        verbose_name=_('money'),
+        decimal_places=2,
+        max_digits=10,
+        default=0,
+    )
+
+    books = models.ManyToManyField(Book, through='BookClient', verbose_name=_('books'))
+
+    def __str__(self) -> str:
+        return f'{self.user.username} ({self.user.first_name} {self.user.last_name})'
+    
+    class Meta:
+        db_table = '"library"."client"'
+        verbose_name = _('client')
+        verbose_name_plural = _('clients')
+
+
+class BookClient(UUIDMixin, CreatedMixin):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, verbose_name=_('book'))
+    client = models.ForeignKey(Client, on_delete=models.CASCADE, verbose_name=_('client'))
+
+    class Meta:
+        db_table = '"library"."book_client"'
+        unique_together = (
+            ('book', 'client'),
+        )
+        verbose_name = _('relationship book client')
+        verbose_name_plural = _('relationships book client')
