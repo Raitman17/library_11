@@ -1,5 +1,11 @@
 from django.urls import path, include
 from . import views
+from rest_framework import routers
+
+router = routers.DefaultRouter()
+router.register(r'books', views.BookViewSet)
+router.register(r'genres', views.GenreViewSet)
+router.register(r'authors', views.AuthorViewSet)
 
 urlpatterns = [
     path('', views.home_page, name='homepage'),
@@ -12,4 +18,6 @@ urlpatterns = [
     path('test_form/', views.form_test_page, name='test_form'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('register/', views.register, name='register'),
+    path('rest/', include(router.urls)),
+    path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

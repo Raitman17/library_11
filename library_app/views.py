@@ -2,7 +2,10 @@ from typing import Any
 from django.shortcuts import render, redirect
 from django.views.generic import ListView
 from django.core.paginator import Paginator
+from rest_framework import viewsets, permissions
+from rest_framework.authentication import TokenAuthentication
 
+from .serializers import BookSerializer, AuthorSerializer, GenreSerializer
 from .models import Book, Genre, Author, Client
 from .forms import TestForm, RegistrationForm
 
@@ -86,3 +89,24 @@ def register(request):
         'registration/register.html',
         {'form': form, 'errors': errors},
     )
+
+class MyPermission(permissions.BasePermission):
+    def has_permission(self, request, _):
+        if request.method in ('GET', 'OPTIONS', 'HEAD'):
+            return bool(request.user and request.user.is_authenticated)
+        elif request.method in ('POST', 'DELETE', 'PUT'):
+            return bool(request.user and request.user.is_superuser)
+        return False
+
+def create_viewset(model_class, serializer):
+    class ViewSet(viewsets.ModelViewSet):
+        queryset = model_class.objects.all()
+        serializer_class = serializer
+        authentication_classes = [TokenAuthentication]
+        permission_classes = [MyPermission]
+
+    return ViewSet
+
+BookViewSet = create_viewset(Book, BookSerializer)
+AuthorViewSet = create_viewset(Author, AuthorSerializer)
+GenreViewSet = create_viewset(Genre, GenreSerializer)
