@@ -20,4 +20,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('rest/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
+    path('profile/', views.profile, name='profile'),
+    path('buy/', views.buy, name='buy'),
 ]

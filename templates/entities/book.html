@@ -4,15 +4,24 @@
     <h1>Book page</h1>
 
     {% if book %}
-    <ul>
+      <ul>
 
-      <li>
-        <a>Title: {{ book.title }}</a><br>
-        <a>Description: {{ book.description }}</a><br>
-        <a>Year: {{ book.year }}</a><br>
-        <a>Volume: {{ book.volume }}</a><br>
-      </li>
-    </ul>
+        <li>
+          <a>Title: {{ book.title }}</a><br>
+          <a>Description: {{ book.description }}</a><br>
+          <a>Year: {{ book.year }}</a><br>
+          <a>Volume: {{ book.volume }}</a><br>
+        </li>
+      </ul>
+      {% if client_has_book %}
+        <h4>
+          You already have this book, you can <a href="{% url 'homepage' %}">read it now</a>!
+        </h4>
+      {% else %}
+        <h4>
+           This book is available for <a href="{% url 'buy'%}?id={{book.id}}">purchase</a>!
+        </h4>
+      {% endif %}
 
     {% else %}
       <p>Book not found..</p>

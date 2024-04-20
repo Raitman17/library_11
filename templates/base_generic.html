@@ -8,7 +8,7 @@
   {% block sidebar %}<!-- insert default navigation text for every page -->
   <ul class="sidebar-nav">
     {% if user.is_authenticated %}
-      <li><a>Hello, {{ user.username }}!</a></li>
+      <li>Hello, <a href="{% url 'profile' %}">{{ user.username }}</a>!</li>
       <li><a href="{% url 'homepage' %}">Homepage</a></li>
       <li><a href="{% url 'books' %}">Books</a></li>
       <li><a href="{% url 'authors' %}">Authors</a></li>

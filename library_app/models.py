@@ -110,6 +110,9 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
     volume = models.PositiveIntegerField(_('volume'), null=False, blank=False)
     type = models.TextField(_('type'), null=True, blank=True, choices=book_types)
     year = models.IntegerField(_('year'), null=True, blank=True, validators=[validate_year])
+    price = models.DecimalField(
+        _('price'), null=False, blank=False, max_digits=11, decimal_places=2, default=0
+    )
 
     genres = models.ManyToManyField(
         Genre, through='BookGenre',

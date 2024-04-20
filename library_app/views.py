@@ -1,5 +1,6 @@
 from typing import Any
 from django.shortcuts import render, redirect
+from django.http.request import HttpRequest
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from rest_framework import viewsets, permissions
@@ -7,7 +8,7 @@ from rest_framework.authentication import TokenAuthentication
 
 from .serializers import BookSerializer, AuthorSerializer, GenreSerializer
 from .models import Book, Genre, Author, Client
-from .forms import TestForm, RegistrationForm
+from .forms import TestForm, RegistrationForm, AddFundsForm
 
 def home_page(request):
     return render(
@@ -42,12 +43,14 @@ def create_view(model_class, context_name, template):
     def view(request):
         id_ = request.GET.get('id', None)
         target = model_class.objects.get(id=id_) if id_ else None
+        context = {context_name: target}
+        if model_class == Book:
+            client = Client.objects.get(user=request.user)
+            context['client_has_book'] = target in client.books.all()
         return render(
             request,
             template,
-            {
-                context_name: target,
-            }
+            context,
         )
     return view
 
@@ -110,3 +113,52 @@ def create_viewset(model_class, serializer):
 BookViewSet = create_viewset(Book, BookSerializer)
 AuthorViewSet = create_viewset(Author, AuthorSerializer)
 GenreViewSet = create_viewset(Genre, GenreSerializer)
+
+
+def profile(request):
+    form_errors = ''
+    client = Client.objects.get(user=request.user)
+    if request.method == 'POST':
+        form = AddFundsForm(request.POST)
+        if form.is_valid():
+            money = form.cleaned_data.get('money')
+            if money > 0:
+                client.money += money
+                client.save()
+                form_errors = f'You have added {money} to your account!'
+            else:
+                form_errors = 'you can only add positive amount of money'
+    else:
+        form = AddFundsForm()
+
+    return render(
+        request,
+        'pages/profile.html',
+        {
+            'form': form,
+            'form_errors': form_errors,
+            'client_data': {'username': client.user.username, 'money': client.money},
+            'client_books': client.books.all(),
+        }
+    )
+
+
+def buy(request):
+    book_id = request.GET.get('id', None)
+    book = Book.objects.get(id=book_id) if book_id else None
+    client = Client.objects.get(user=request.user)
+    enough_money = client.money >= book.price
+    
+    if request.method == 'POST' and enough_money:
+        client.books.add(book)
+        print('book was purchased')
+
+    return render(
+        request,
+        'pages/buy.html',
+        {
+            'enough_money': enough_money,
+            'money': client.money,
+            'book': book,
+        }
+    )

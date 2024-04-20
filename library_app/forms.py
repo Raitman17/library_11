@@ -18,7 +18,9 @@ class RegistrationForm(UserCreationForm):
     last_name = CharField(max_length=100, required=True)
     email = EmailField(max_length=200, required=True)
 
-
     class Meta:
         model = User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
+
+class AddFundsForm(Form):
+    money = DecimalField(label='money', decimal_places=2, max_digits=11)
