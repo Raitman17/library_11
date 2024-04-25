@@ -1,32 +1,45 @@
 from django.test import TestCase
-from django.test.client import Client
+from django.test.client import Client as TestClient
 from django.urls import reverse
-from library_app.models import Genre, Book, Author
+from django.contrib.auth.models import User
+from library_app.models import Genre, Book, Author, Client
+from rest_framework import status
 
-OK = 200
+def create_method_with_auth(url, page_name, template):
+    def method(self):
+        self.client = TestClient()
+        user = User.objects.create(username='user', password='user')
+        Client.objects.create(user=user)
+        self.client.force_login(user=user)
 
-def create_view_test(url, page_name, template):
-    class ViewTest(TestCase):
-        def setUp(self):
-            self.client = Client()
-        
-        def test_view_exists_by_url(self):
-            response = self.client.get(url)
-            self.assertEqual(response.status_code, OK)
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertTemplateUsed(response, template)
 
-        def test_view_exists_by_name(self):
-            response = self.client.get(reverse(page_name))
-            self.assertEqual(response.status_code, OK)
+        response = self.client.get(reverse(page_name))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+    return method
 
-        def test_view_uses_template(self):
-            response = self.client.get(url)
-            self.assertEqual(response.status_code, OK)
-            self.assertTemplateUsed(response, template)
-    return ViewTest
+def create_method_no_auth(url):
+    def method(self):
+        self.client = TestClient()
+        self.assertEqual(self.client.get(url).status_code, status.HTTP_302_FOUND)
+    return method
 
-BooksViewTest = create_view_test('/books/', 'books', 'catalog/books.html')
-AuthorsViewTest = create_view_test('/authors/', 'authors', 'catalog/authors.html')
-GenresViewTest = create_view_test('/genres/', 'genres', 'catalog/genres.html')
-BookViewTest = create_view_test('/book/', 'book', 'entities/book.html')
-AuthorViewTest = create_view_test('/author/', 'author', 'entities/author.html')
-GenreViewTest = create_view_test('/genre/', 'genre', 'entities/genre.html')
+pages = (
+    ('/books/', 'books', 'catalog/books.html'),
+    ('/authors/', 'authors', 'catalog/authors.html'),
+    ('/genres/', 'genres', 'catalog/genres.html'),
+    ('/profile/', 'profile', 'pages/profile.html'),
+)
+methods_with_auth = {f'test_{page[1]}': create_method_with_auth(*page) for page in pages}
+TestWithAuth = type('TestWithAuth', (TestCase,), methods_with_auth)
+
+methods_no_auth = {f'test_{url}': create_method_no_auth(url) for url, _, _ in pages}
+TestNoAuth = type('TestNoAuth', (TestCase,), methods_no_auth)
+
+instance_pages = (
+    ('/book/', 'book', 'entities/book.html'),
+    ('/author/', 'author', 'entities/author.html'),
+    ('/genre/', 'genre', 'entities/genre.html'),
+)

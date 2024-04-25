@@ -6,6 +6,8 @@ from rest_framework import viewsets, permissions
 from rest_framework.authentication import TokenAuthentication
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ValidationError
+
 from .serializers import BookSerializer, AuthorSerializer, GenreSerializer
 from .models import Book, Genre, Author, Client
 from .forms import TestForm, RegistrationForm, AddFundsForm
@@ -38,12 +40,18 @@ def create_listview(model_class, plural_name, template):
             return context
     return CustomListView
 
-
-def create_view(model_class, context_name, template):
+def create_view(model_class, context_name, template, redirect_page):
     @login_required
     def view(request):
         id_ = request.GET.get('id', None)
-        target = model_class.objects.get(id=id_) if id_ else None
+        if not id_:
+            return redirect(redirect_page)
+        try:
+            target = model_class.objects.get(id=id_) if id_ else None
+        except ValidationError:
+            return redirect(redirect_page)
+        if not target:
+            return redirect(redirect_page)
         context = {context_name: target}
         if model_class == Book:
             client = Client.objects.get(user=request.user)
@@ -55,9 +63,9 @@ def create_view(model_class, context_name, template):
         )
     return view
 
-view_book = create_view(Book, 'book', 'entities/book.html')
-view_author = create_view(Author, 'author', 'entities/author.html')
-view_genre = create_view(Genre, 'genre', 'entities/genre.html')
+view_book = create_view(Book, 'book', 'entities/book.html', 'books')
+view_author = create_view(Author, 'author', 'entities/author.html', 'authors')
+view_genre = create_view(Genre, 'genre', 'entities/genre.html', 'genres')
 
 BookListView = create_listview(Book, 'books', 'catalog/books.html')
 AuthorListView = create_listview(Author, 'authors', 'catalog/authors.html')
@@ -146,7 +154,14 @@ def profile(request):
 @login_required
 def buy(request):
     book_id = request.GET.get('id', None)
-    book = Book.objects.get(id=book_id) if book_id else None
+    if not book_id:
+        return redirect('books')
+    try:
+        book = Book.objects.get(id=book_id) if book_id else None
+    except ValidationError:
+        return redirect('books')
+    if not book:
+        return redirect('books')
     client = Client.objects.get(user=request.user)
     
     if request.method == 'POST' and client.money >= book.price:
