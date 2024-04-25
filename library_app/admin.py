@@ -1,7 +1,7 @@
 from typing import Any
 from django.contrib import admin
 from django.db.models.query import QuerySet
-from .models import Author, Genre, Book, BookAuthor, BookGenre
+from .models import Author, Genre, Book, BookAuthor, BookGenre, Client, BookClient
 from datetime import date
 from django.utils.translation import gettext_lazy as _
 
@@ -12,6 +12,15 @@ class BookAuthorInline(admin.TabularInline):
 class BookGenreInline(admin.TabularInline):
     model = BookGenre
     extra = 1
+
+class BookClientInline(admin.TabularInline):
+    model = BookClient
+    extra = 1
+
+@admin.register(Client)
+class ClientAdmin(admin.ModelAdmin):
+    model = Client
+    inlines = (BookClientInline,)
 
 @admin.register(Author)
 class AuthorAdmin(admin.ModelAdmin):

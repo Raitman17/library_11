@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-12 09:53+0300\n"
+"POT-Creation-Date: 2024-04-25 10:11+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: library_app/admin.py:28
+#: library_app/admin.py:37
 msgid "recency"
 msgstr ""
 
-#: library_app/admin.py:35
+#: library_app/admin.py:44
 msgid "Created in the last 10 years"
 msgstr ""
 
-#: library_app/admin.py:36
+#: library_app/admin.py:45
 msgid "Created in the last 20 years"
 msgstr ""
 
@@ -46,20 +46,20 @@ msgstr ""
 msgid "modified"
 msgstr ""
 
-#: library_app/models.py:68 library_app/models.py:184
+#: library_app/models.py:68
 msgid "full name"
 msgstr ""
 
-#: library_app/models.py:72 library_app/models.py:90 library_app/models.py:130
-#: library_app/models.py:186
+#: library_app/models.py:72 library_app/models.py:90 library_app/models.py:141
+#: library_app/models.py:197
 msgid "books"
 msgstr ""
 
-#: library_app/models.py:81 library_app/models.py:160
+#: library_app/models.py:81 library_app/models.py:171
 msgid "author"
 msgstr ""
 
-#: library_app/models.py:82 library_app/models.py:120
+#: library_app/models.py:82 library_app/models.py:131
 msgid "authors"
 msgstr ""
 
@@ -67,21 +67,21 @@ msgstr ""
 msgid "name"
 msgstr ""
 
-#: library_app/models.py:86 library_app/models.py:109
+#: library_app/models.py:86 library_app/models.py:113
 msgid "description"
 msgstr ""
 
-#: library_app/models.py:99 library_app/models.py:139
+#: library_app/models.py:99 library_app/models.py:150
 msgid "genre"
 msgstr ""
 
-#: library_app/models.py:100 library_app/models.py:116
+#: library_app/models.py:100 library_app/models.py:127
 msgid "genres"
 msgstr ""
 
-#: library_app/models.py:103 library_app/models.py:129
-#: library_app/models.py:135 library_app/models.py:156
-#: library_app/models.py:198
+#: library_app/models.py:103 library_app/models.py:140
+#: library_app/models.py:146 library_app/models.py:167
+#: library_app/models.py:209
 msgid "book"
 msgstr ""
 
@@ -89,54 +89,62 @@ msgstr ""
 msgid "magazine"
 msgstr ""
 
-#: library_app/models.py:108
-msgid "title"
-msgstr ""
-
-#: library_app/models.py:110
-msgid "volume"
-msgstr ""
-
-#: library_app/models.py:111
-msgid "type"
+#: library_app/models.py:109
+msgid "value has to be greater than zero"
 msgstr ""
 
 #: library_app/models.py:112
+msgid "title"
+msgstr ""
+
+#: library_app/models.py:114
+msgid "volume"
+msgstr ""
+
+#: library_app/models.py:115
+msgid "type"
+msgstr ""
+
+#: library_app/models.py:116
 msgid "year"
 msgstr ""
 
-#: library_app/models.py:150
+#: library_app/models.py:118
+msgid "price"
+msgstr ""
+
+#: library_app/models.py:161
 msgid "Relationship book genre"
 msgstr ""
 
-#: library_app/models.py:151
+#: library_app/models.py:162
 msgid "Relationships book genre"
 msgstr ""
 
-#: library_app/models.py:171
+#: library_app/models.py:182
 msgid "Relationship book author"
 msgstr ""
 
-#: library_app/models.py:172
+#: library_app/models.py:183
 msgid "Relationships book author"
 msgstr ""
 
-#: library_app/models.py:179
+#: library_app/models.py:191
 msgid "money"
 msgstr ""
 
-#: library_app/models.py:193 library_app/models.py:199
+#: library_app/models.py:204 library_app/models.py:210
 msgid "client"
 msgstr ""
 
-#: library_app/models.py:194
+#: library_app/models.py:205
 msgid "clients"
 msgstr ""
 
-#: library_app/models.py:206
+#: library_app/models.py:217
 msgid "relationship book client"
 msgstr ""
 
-#: library_app/models.py:207
+#: library_app/models.py:218
 msgid "relationships book client"
 msgstr ""

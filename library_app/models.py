@@ -104,6 +104,10 @@ book_types = (
     ('magazine', _('magazine')),
 )
 
+def check_positive(number) -> None:
+    if number < 0:
+        raise ValidationError(_('value has to be greater than zero'))
+
 class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(_('title'), null=False, blank=False, max_length=NAMES_MAX_LENGTH)
     description = models.TextField(_('description'), null=True, blank=True, max_length=DESCRIPTION_MAX_LENGTH)
@@ -111,7 +115,11 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
     type = models.TextField(_('type'), null=True, blank=True, choices=book_types)
     year = models.IntegerField(_('year'), null=True, blank=True, validators=[validate_year])
     price = models.DecimalField(
-        _('price'), null=False, blank=False, max_digits=11, decimal_places=2, default=0
+        _('price'),
+        null=False, blank=False,
+        max_digits=11, decimal_places=2,
+        default=0,
+        validators=[check_positive]
     )
 
     genres = models.ManyToManyField(
@@ -174,10 +182,11 @@ class BookAuthor(UUIDMixin, CreatedMixin):
         verbose_name = _('Relationship book author')
         verbose_name_plural = _('Relationships book author')
 
-
-# from django.conf.global_settings import AUTH_USER_MODEL
 class Client(CreatedMixin, ModifiedMixin):
-    user = models.OneToOneField(AUTH_USER_MODEL, on_delete=models.CASCADE, primary_key=True)
+    user = models.OneToOneField(
+        AUTH_USER_MODEL,
+        on_delete=models.CASCADE, primary_key=True,
+    )
     money = models.DecimalField(
         verbose_name=_('money'),
         decimal_places=2,

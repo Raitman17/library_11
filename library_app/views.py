@@ -1,11 +1,11 @@
 from typing import Any
 from django.shortcuts import render, redirect
-from django.http.request import HttpRequest
 from django.views.generic import ListView
 from django.core.paginator import Paginator
 from rest_framework import viewsets, permissions
 from rest_framework.authentication import TokenAuthentication
-
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .serializers import BookSerializer, AuthorSerializer, GenreSerializer
 from .models import Book, Genre, Author, Client
 from .forms import TestForm, RegistrationForm, AddFundsForm
@@ -22,7 +22,7 @@ def home_page(request):
     )
 
 def create_listview(model_class, plural_name, template):
-    class CustomListView(ListView):
+    class CustomListView(LoginRequiredMixin, ListView):
         model = model_class
         template_name = template
         paginate_by = 10
@@ -40,6 +40,7 @@ def create_listview(model_class, plural_name, template):
 
 
 def create_view(model_class, context_name, template):
+    @login_required
     def view(request):
         id_ = request.GET.get('id', None)
         target = model_class.objects.get(id=id_) if id_ else None
@@ -114,7 +115,7 @@ BookViewSet = create_viewset(Book, BookSerializer)
 AuthorViewSet = create_viewset(Author, AuthorSerializer)
 GenreViewSet = create_viewset(Genre, GenreSerializer)
 
-
+@login_required
 def profile(request):
     form_errors = ''
     client = Client.objects.get(user=request.user)
@@ -142,22 +143,22 @@ def profile(request):
         }
     )
 
-
+@login_required
 def buy(request):
     book_id = request.GET.get('id', None)
     book = Book.objects.get(id=book_id) if book_id else None
     client = Client.objects.get(user=request.user)
-    enough_money = client.money >= book.price
     
-    if request.method == 'POST' and enough_money:
-        client.books.add(book)
-        print('book was purchased')
+    if request.method == 'POST' and client.money >= book.price:
+            client.books.add(book)
+            client.money -= book.price
+            client.save()
 
     return render(
         request,
         'pages/buy.html',
         {
-            'enough_money': enough_money,
+            'client_has_book': book in client.books.all(),
             'money': client.money,
             'book': book,
         }
