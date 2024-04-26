@@ -1,25 +1,14 @@
-from django.forms import Form, CharField, DecimalField, ChoiceField, EmailField
-from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import User
+from django.forms import Form, CharField, DecimalField, EmailField
+from django.contrib.auth import models, forms
 from django.core.exceptions import ValidationError
 
-choices = (
-    ('first', 'first'),
-    ('second', 'second'),
-)
-
-class TestForm(Form):
-    choice = ChoiceField(label='choice', choices=choices)
-    number = DecimalField(label='number')
-    text = CharField(label='text')
-
-class RegistrationForm(UserCreationForm):
+class RegistrationForm(forms.UserCreationForm):
     first_name = CharField(max_length=100, required=True)
     last_name = CharField(max_length=100, required=True)
     email = EmailField(max_length=200, required=True)
 
     class Meta:
-        model = User
+        model = models.User
         fields = ['username', 'first_name', 'last_name', 'email', 'password1', 'password2']
 
 class AddFundsForm(Form):

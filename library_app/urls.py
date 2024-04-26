@@ -15,7 +15,6 @@ urlpatterns = [
     path('author/', views.view_author, name='author'),
     path('genres/', views.GenreListView.as_view(), name='genres'),
     path('genre/', views.view_genre, name='genre'),
-    path('test_form/', views.form_test_page, name='test_form'),
     path('accounts/', include('django.contrib.auth.urls')),
     path('register/', views.register, name='register'),
     path('rest/', include(router.urls)),

@@ -2,7 +2,6 @@ from django.db import models
 from uuid import uuid4
 from datetime import datetime, timezone
 from django.core.exceptions import ValidationError
-from typing import Callable
 from django.utils.translation import gettext_lazy as _
 from django.conf.global_settings import AUTH_USER_MODEL
 
