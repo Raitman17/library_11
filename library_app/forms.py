@@ -24,3 +24,21 @@ class RegistrationForm(UserCreationForm):
 
 class AddFundsForm(Form):
     money = DecimalField(label='money', decimal_places=2, max_digits=11)
+
+    def is_valid(self) -> bool:
+        def add_error(error):
+            if self.errors:
+                self.errors['money'] += [error]
+            else:
+                self.errors['money'] = [error]
+
+        if not super().is_valid():
+            return False
+        money = self.cleaned_data.get('money', None)
+        if not money:
+            add_error(ValidationError('an error occured, money field was not specified!'))
+            return False
+        if money < 0:
+            add_error(ValidationError('you can only add positive amount of money!'))
+            return False
+        return True

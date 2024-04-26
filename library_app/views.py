@@ -131,12 +131,8 @@ def profile(request):
         form = AddFundsForm(request.POST)
         if form.is_valid():
             money = form.cleaned_data.get('money')
-            if money > 0:
-                client.money += money
-                client.save()
-                form_errors = f'You have added {money} to your account!'
-            else:
-                form_errors = 'you can only add positive amount of money'
+            client.money += money
+            client.save()
     else:
         form = AddFundsForm()
 
