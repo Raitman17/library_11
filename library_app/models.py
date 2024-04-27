@@ -124,6 +124,9 @@ class BookManager(models.Manager):
             check_created(kwargs['created'])
         if 'modified' in kwargs.keys():
             check_modified(kwargs['modified'])
+        if 'type' in kwargs.keys():
+            if not any([option[0] == kwargs['type'] for option in book_types]):
+                raise ValidationError(f'type {kwargs["type"]} is unknown')
         return super().create(**kwargs)
 
 
@@ -203,6 +206,12 @@ class BookAuthor(UUIDMixin, CreatedMixin):
         verbose_name = _('Relationship book author')
         verbose_name_plural = _('Relationships book author')
 
+class ClientManager(models.Manager):
+    def create(self, **kwargs: Any) -> Any:
+        if 'money' in kwargs.keys():
+            check_positive(kwargs['money'])
+        return super().create(**kwargs)
+
 class Client(CreatedMixin, ModifiedMixin):
     user = models.OneToOneField(
         AUTH_USER_MODEL,
@@ -215,6 +224,7 @@ class Client(CreatedMixin, ModifiedMixin):
         default=0,
     )
 
+    objects = ClientManager()
     books = models.ManyToManyField(Book, through='BookClient', verbose_name=_('books'))
 
     def __str__(self) -> str:
