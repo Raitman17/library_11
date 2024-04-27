@@ -9,3 +9,4 @@ bandit==1.7.5
 wemake-python-styleguide==0.18.0
 flake8==6.1.0
 flake8-bandit==4.1.1
+python-dotenv==0.21.0
