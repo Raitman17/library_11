@@ -1,3 +1,4 @@
+from typing import Any
 from django.db import models
 from uuid import uuid4
 from datetime import datetime, timezone
@@ -107,6 +108,25 @@ def check_positive(number) -> None:
     if number < 0:
         raise ValidationError(_('value has to be greater than zero'))
 
+
+class BookManager(models.Manager):
+    def filter_by_author_name(self, author_name: str) -> None:
+        return self.get_queryset().filter(authors__full_name=author_name)
+    
+    def create(self, **kwargs: Any) -> Any:
+        if 'year' in kwargs.keys():
+            validate_year(kwargs['year'])
+        if 'price' in kwargs.keys():
+            check_positive(kwargs['price'])
+        if 'volume' in kwargs.keys():
+            check_positive(kwargs['volume'])
+        if 'created' in kwargs.keys():
+            check_created(kwargs['created'])
+        if 'modified' in kwargs.keys():
+            check_modified(kwargs['modified'])
+        return super().create(**kwargs)
+
+
 class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
     title = models.TextField(_('title'), null=False, blank=False, max_length=NAMES_MAX_LENGTH)
     description = models.TextField(_('description'), null=True, blank=True, max_length=DESCRIPTION_MAX_LENGTH)
@@ -121,6 +141,7 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
         validators=[check_positive]
     )
 
+    objects = BookManager()
     genres = models.ManyToManyField(
         Genre, through='BookGenre',
         verbose_name=_('genres'),
@@ -138,6 +159,7 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
         ordering = ['title', 'type', 'year']
         verbose_name = _('book')
         verbose_name_plural = _('books')
+
 
 class BookGenre(UUIDMixin, CreatedMixin):
     book = models.ForeignKey(
