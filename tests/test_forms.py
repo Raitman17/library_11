@@ -1,5 +1,6 @@
 from django.test import TestCase
 from library_app.forms import RegistrationForm, AddFundsForm
+from django.contrib.auth.models import User
 
 valid_data = {
     'username': 'abc',
@@ -24,7 +25,7 @@ common_password = valid_data.copy()
 common_password['password1'] = 'abcdef123'
 common_password['password2'] = 'abcdef123'
 
-class TestRestrationForm(TestCase):
+class TestRegistrationForm(TestCase):
     def test_valid(self):
         self.assertTrue(RegistrationForm(data=valid_data).is_valid())
 
@@ -37,8 +38,12 @@ class TestRestrationForm(TestCase):
     def test_invalid_email(self):
         self.assertFalse(RegistrationForm(data=invalid_email).is_valid())
 
-    def test_common_passwor(self):
+    def test_common_password(self):
         self.assertFalse(RegistrationForm(data=common_password).is_valid())
+
+    def test_existing_user(self):
+        User.objects.create(username=valid_data['username'], password='abc')
+        self.assertFalse(RegistrationForm(data=valid_data).is_valid())
 
 
 class TestAddFundsForm(TestCase):
