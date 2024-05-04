@@ -69,21 +69,19 @@ AuthorListView = create_listview(Author, 'authors', 'catalog/authors.html')
 GenreListView = create_listview(Genre, 'genres', 'catalog/genres.html')
 
 def register(request):
-    errors = ''
+
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
             Client.objects.create(user=user)
             return redirect('homepage')
-        else:
-            errors = form.errors
     else:
         form = RegistrationForm()
     return render(
         request,
         'registration/register.html',
-        {'form': form, 'errors': errors},
+        {'form': form},
     )
 
 class MyPermission(permissions.BasePermission):
@@ -142,9 +140,10 @@ def buy(request):
         return redirect('books')
     if not book:
         return redirect('books')
-    client = Client.objects.get(user=request.user)
     
-    if request.method == 'POST' and client.money >= book.price:
+    client = Client.objects.get(user=request.user)
+
+    if request.method == 'POST' and client.money >= book.price and book not in client.books.all():
             client.books.add(book)
             client.money -= book.price
             client.save()
