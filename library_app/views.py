@@ -157,3 +157,26 @@ def buy(request):
             'book': book,
         }
     )
+
+@decorators.login_required
+def read(request):
+    book_id = request.GET.get('id', None)
+    if not book_id:
+        return redirect('books')
+    try:
+        book = Book.objects.get(id=book_id) if book_id else None
+    except exceptions.ValidationError:
+        return redirect('books')
+    if not book:
+        return redirect('books')
+    
+    client = Client.objects.get(user=request.user)
+
+    return render(
+        request,
+        'pages/read.html',
+        {
+            'user_has_access': book in client.books.all(),
+            'book': book,
+        },
+    )

@@ -15,7 +15,7 @@
       </ul>
       {% if client_has_book %}
         <h4>
-          You already have this book, you can <a href="{% url 'homepage' %}">read it now</a>!
+          You already have this book, you can <a href="{% url 'read'%}?id={{book.id}}">read it now</a>!
         </h4>
       {% else %}
         <h4>
