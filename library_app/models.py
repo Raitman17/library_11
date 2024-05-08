@@ -5,6 +5,7 @@ from datetime import datetime, timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf.global_settings import AUTH_USER_MODEL
+from library.settings import STATIC_URL
 
 def get_datetime():
     return datetime.now(timezone.utc)
@@ -143,6 +144,7 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
         default=0,
         validators=[check_positive]
     )
+    file = models.FileField(null=True, upload_to=STATIC_URL)
 
     objects = BookManager()
     genres = models.ManyToManyField(
@@ -153,6 +155,10 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
         Author, through='BookAuthor',
         verbose_name=_('authors'),
     )
+
+    @property
+    def file_path(self):
+        return str(self.file).split('/')[-1]
 
     def __str__(self) -> str:
         return f'{self.title}, {self.type}, {self.volume} pages'

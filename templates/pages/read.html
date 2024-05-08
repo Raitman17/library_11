@@ -6,7 +6,7 @@
         {% if user_has_access %}
             <div>
                 {% load static %}
-                <embed src="{% static '1.pdf' %}" width="800px" height="800px"/>
+                <embed src="{% static book.file_path %}" width="800px" height="800px"/>
             </div>
         {% else %}
             <h3>
