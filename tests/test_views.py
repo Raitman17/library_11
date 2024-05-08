@@ -58,6 +58,7 @@ instance_pages = (
     ('/author/', 'author', 'entities/author.html', Author, {'full_name': 'A'}),
     ('/genre/', 'genre', 'entities/genre.html', Genre, {'name': 'A'}),
     ('/buy/', 'buy', 'pages/buy.html', Book, {'title': 'A', 'volume': 1}),
+    ('/read/', 'read', 'pages/read.html', Book, {'title': 'A', 'volume': 1})
 )
 
 pages = (
