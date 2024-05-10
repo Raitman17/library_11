@@ -6,6 +6,7 @@ from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf.global_settings import AUTH_USER_MODEL
 from library.settings import STATIC_URL
+from django_minio_backend import MinioBackend, iso_date_prefix
 
 def get_datetime():
     return datetime.now(timezone.utc)
@@ -144,8 +145,11 @@ class Book(UUIDMixin, CreatedMixin, ModifiedMixin):
         default=0,
         validators=[check_positive]
     )
-    file = models.FileField(null=True, upload_to=STATIC_URL)
-
+    file = models.FileField(
+        null=True, blank=True, 
+        storage=MinioBackend(bucket_name='static'),
+        upload_to=iso_date_prefix,
+    )
     objects = BookManager()
     genres = models.ManyToManyField(
         Genre, through='BookGenre',

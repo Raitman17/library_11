@@ -21,4 +21,3 @@ class TestAddFunds(TestCase):
         self.library_client.refresh_from_db()
 
         self.assertEqual(self.library_client.money, 1)
-
