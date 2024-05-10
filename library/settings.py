@@ -121,9 +121,6 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = (
-    path.join(BASE_DIR, 'static'),
-)
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 TEST_RUNNER = 'tests.runner.PostgresSchemaRunner'
@@ -141,7 +138,7 @@ MINIO_ENDPOINT = 'localhost:9000'
 MINIO_ACCESS_KEY = getenv('MINIO_ACCESS_KEY_ID')
 MINIO_SECRET_KEY = getenv('MINIO_SECRET_ACCESS_KEY')
 MINIO_USE_HTTPS = False
-MINIO_CONSISTENCY_CHECK_ON_START = True
+MINIO_CONSISTENCY_CHECK_ON_START = bool(getenv('MINIO_CONSISTENCY_CHECK_ON_START', False))
 MINIO_PRIVATE_BUCKETS = []
 MINIO_PUBLIC_BUCKETS = [
     'static',
