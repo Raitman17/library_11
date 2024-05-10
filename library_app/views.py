@@ -47,8 +47,6 @@ def create_view(model_class, context_name, template, redirect_page):
             target = model_class.objects.get(id=id_) if id_ else None
         except exceptions.ValidationError:
             return redirect(redirect_page)
-        if not target:
-            return redirect(redirect_page)
         context = {context_name: target}
         if model_class == Book:
             client = Client.objects.get(user=request.user)
@@ -69,7 +67,6 @@ AuthorListView = create_listview(Author, 'authors', 'catalog/authors.html')
 GenreListView = create_listview(Genre, 'genres', 'catalog/genres.html')
 
 def register(request):
-
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():

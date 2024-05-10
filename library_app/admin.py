@@ -44,6 +44,7 @@ class NewestBookFilter(admin.SimpleListFilter):
             (self._ten_yo, _('Created in the last 10 years')),
             (self._twenty_yo, _('Created in the last 20 years')),
         ]
+
     def queryset(self, _: Any, queryset: QuerySet[Any]) -> QuerySet[Any] | None:
         if self.value() == self._ten_yo:
             return queryset.filter(year__gte=date.today().year - DECADE)

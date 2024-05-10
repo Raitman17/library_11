@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from django.conf.global_settings import AUTH_USER_MODEL
-from library.settings import STATIC_URL
 from django_minio_backend import MinioBackend, iso_date_prefix
 
 def get_datetime():
